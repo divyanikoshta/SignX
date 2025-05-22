@@ -1,11 +1,7 @@
-import { getDocument, GlobalWorkerOptions, PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
-
+import { getDocument, PDFDocumentProxy, PDFPageProxy } from "pdfjs-dist";
+import './../pdfWorkerSetup';
 
 export const getPDFDocument = async (arrayBuffer: string) => {
-    GlobalWorkerOptions.workerSrc = new URL(
-        'pdfjs-dist/build/pdf.worker.min.mjs',
-        import.meta.url,
-    ).toString();
 
     return new Promise((resolve, reject) => {
         getDocument({ data: arrayBuffer })

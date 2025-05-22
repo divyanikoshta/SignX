@@ -48,7 +48,7 @@ const FileUploaderConatiner = ({ handleClickSign }: handleClickSignProps) => {
                 </div>
 
                 <div className="mt-4 text flex justify-end items-center">
-                    <Button disabled={!file} size="large" onClick={handleClickSign} variant="primary" rightIcon={<ArrowRight />}>Sign</Button>
+                    <Button size="large" onClick={handleClickSign} variant="primary" rightIcon={<ArrowRight />}>Sign</Button>
                 </div>
             </div>
 

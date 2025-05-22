@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Layout from "./Layout";
-// import FILE from "../mock/samplefile";
 import PdfViewHelper from "./PdfViewHelper";
 import FILE from "../mock/sampleFile2";
-import { pdfjs } from "react-pdf";
 import FileUploaderConatiner from "./FileUploaderConatiner";
-pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}pdf.worker.min.mjs`;
+import './../pdfWorkerSetup';
+import { pdfjs } from 'react-pdf';
+
+// Set this before using any react-pdf components
+pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.mjs`;
+
 
 const PdfViewer = () => {
     const pdfConfig = {

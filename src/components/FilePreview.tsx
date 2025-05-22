@@ -1,5 +1,6 @@
 import { Page, Document } from "react-pdf";
 
+
 interface FilePreviewProps {
     file: File | null,
     onDocumentLoadSuccess: any,
