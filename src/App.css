@@ -1,3 +1,14 @@
+:root {
+  --primary-color: #1e3a8a;
+  --tertiary-color: #d8d6d6;
+  --font-stack: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+body {
+  font-family: var(--font-stack);
+}
+
 .App {
   text-align: center;
 }
@@ -32,6 +43,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
