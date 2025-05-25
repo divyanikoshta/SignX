@@ -46,12 +46,8 @@ const SignatureModal = ({ children, onConfirm, onClose }: SignatureModalProp) =>
                     <ReactSignatureCanvas
                         ref={signRef}
                         penColor="black"
-                        minWidth={1.6}
-                        maxWidth={3.0}
                         canvasProps={{
                             className: classes.canvasSign,
-                            width: 500,
-                            height: 200
                         }}
                         onBegin={handleBeginSign}
                     />
