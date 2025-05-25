@@ -5,9 +5,10 @@ interface FilePreviewProps {
     file: File | null,
     onDocumentLoadSuccess: any,
     numPages: number,
+    handlePageRenderSuccess: any
 }
 
-const FilePreview = ({ file, onDocumentLoadSuccess, numPages }: FilePreviewProps) => {
+const FilePreview = ({ file, onDocumentLoadSuccess, numPages, handlePageRenderSuccess }: FilePreviewProps) => {
 
     return (
         <div className="border rounded shadow-sm p-4 md:w-1/3" style={{ background: "#f1f5f9", width: "40%", display: "flex", flexDirection: "column" }}>
@@ -19,7 +20,7 @@ const FilePreview = ({ file, onDocumentLoadSuccess, numPages }: FilePreviewProps
                     <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
                         {Array.from({ length: numPages }, (_, index) => (
                             <Page key={index + 1} pageNumber={index + 1} width={400} renderTextLayer={false}
-                                renderAnnotationLayer={false} />
+                                renderAnnotationLayer={false} onRenderSuccess={handlePageRenderSuccess} />
                         ))}
                     </Document>
                 ) : <div className="flex justify-center items-center h-full" style={{ background: "white", }}>

@@ -6,6 +6,7 @@ import { usePdfModifier } from '../hooks/usePdfModifier';
 import SignatureBox from './SignatureBox';
 import SignatureModal from './SignatureModal/SignatureModal';
 import PdfControls from './PdfControls';
+import { useSignXLoader } from '../hooks/useSignXLoader';
 
 const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
     pdfConfig,
@@ -15,9 +16,7 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
     const [fileAsBase64, setFileAsBase64] = useState<string>('');
 
     useEffect(() => {
-        console.log("file--->", file)
         if (!file) return;
-
         const toBase64 = (file: File): Promise<string> => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -35,7 +34,8 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
     }, [file]);
 
     const containerRef = useRef<HTMLDivElement>(null);
-    const { isLoaded } = usePdfRenderer(fileAsBase64, pdfConfig.scale);
+    const { isLoading } = usePdfRenderer(fileAsBase64, pdfConfig.scale);
+    const { Loader } = useSignXLoader(isLoading);
 
     const {
         boxes,
@@ -97,55 +97,57 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
         downloadPdf(`${file?.name.split(".")[0]}_singed.pdf`);
     }, [downloadPdf]);
 
-    return (
-        <div className="pdf-view-helper flex justify-center">
-            <div className='flex justify-center w-[80%]'>
-                <PdfControls
-                    onAddSignatureBox={startAddingBox}
-                    onDownloadPdf={handleDownloadPdf}
-                    isLoading={!isLoaded}
-                    hasSignatures={boxes.some(box => box.sign !== '')}
-                />
 
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <div
-                        ref={containerRef}
-                        id="pdf-container"
-                        onClick={handleContainerClick}
-                        style={{ position: 'relative' }}
-                    >
-                        {boxes.map((box, index) => (
-                            <SignatureBox
-                                key={box.id}
-                                box={box}
-                                index={index}
-                                onBoxClick={handleBoxClick}
-                                onMouseDown={handleBoxMouseDown}
-                                onDelete={deleteBox}
-                            />
-                        ))}
+
+    return (
+        <>
+            <Loader />
+            <div className="pdf-view-helper flex justify-center">
+                <div className='flex justify-center w-[80%]'>
+                    <PdfControls
+                        onAddSignatureBox={startAddingBox}
+                        onDownloadPdf={handleDownloadPdf}
+                        isLoading={!isLoading}
+                        hasSignatures={boxes.some(box => box.sign !== '')} />
+
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div
+                            ref={containerRef}
+                            id="pdf-container"
+                            onClick={handleContainerClick}
+                            style={{ position: 'relative' }}
+                        >
+                            {boxes.map((box, index) => (
+                                <SignatureBox
+                                    key={box.id}
+                                    box={box}
+                                    index={index}
+                                    onBoxClick={handleBoxClick}
+                                    onMouseDown={handleBoxMouseDown}
+                                    onDelete={deleteBox} />
+                            ))}
+                        </div>
                     </div>
                 </div>
+
+
+                {selectedBoxId && (
+                    <SignatureModal
+                        onConfirm={handleModalConfirm}
+                        onClose={handleModalClose} />
+                )}
+
+                {/* {modifiedPdf && (
+        <iframe
+            title="Modified PDF"
+            src={modifiedPdf}
+            width="100%"
+            height="600px"
+            style={{ border: '1px solid #ccc', marginTop: '20px', borderRadius: '4px' }}
+        />
+    )} */}
             </div>
-
-
-            {selectedBoxId && (
-                <SignatureModal
-                    onConfirm={handleModalConfirm}
-                    onClose={handleModalClose}
-                />
-            )}
-
-            {/* {modifiedPdf && (
-                <iframe
-                    title="Modified PDF"
-                    src={modifiedPdf}
-                    width="100%"
-                    height="600px"
-                    style={{ border: '1px solid #ccc', marginTop: '20px', borderRadius: '4px' }}
-                />
-            )} */}
-        </div>
+        </>
     );
 };
 

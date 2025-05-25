@@ -3,13 +3,14 @@ import { PDFDocument } from 'pdf-lib';
 import { getPDFDocument, createPDFPage, renderPDFToCanvas } from '../utility/pdfViewerUtility';
 
 export const usePdfRenderer = (fileAsBase64: string, scale: number) => {
-    const [isLoaded, setIsLoaded] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [numPages, setNumPages] = useState(0);
     const pdfDocumentRef = useRef<any>(null);
 
     useEffect(() => {
         const renderPdf = async () => {
             try {
+                setIsLoading(true);
                 const binaryString = atob(fileAsBase64);
                 const pdfDocument: any = await getPDFDocument(binaryString);
                 pdfDocumentRef.current = pdfDocument;
@@ -49,7 +50,7 @@ export const usePdfRenderer = (fileAsBase64: string, scale: number) => {
                     perPageContainer.appendChild(pdfPageCanvas);
                 }
 
-                setIsLoaded(true);
+                setIsLoading(false);
             } catch (error) {
                 console.error('Error rendering PDF:', error);
             }
@@ -65,5 +66,5 @@ export const usePdfRenderer = (fileAsBase64: string, scale: number) => {
         };
     }, [fileAsBase64, scale]);
 
-    return { isLoaded, numPages, pdfDocumentRef };
+    return { isLoading, numPages, pdfDocumentRef };
 };
