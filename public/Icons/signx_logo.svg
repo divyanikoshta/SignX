@@ -1,0 +1,31 @@
+<svg width="100" viewBox="0 0 100 20" xmlns="http://www.w3.org/2000/svg">
+  <!-- Document icon -->
+  <g transform="translate(3, 2)">
+    <!-- Main document rectangle -->
+    <rect x="0" y="0" width="15" height="16" rx="1" ry="1" 
+          fill="none" stroke="white" stroke-width="1.2"/>
+    
+    <!-- Document lines -->
+    <line x1="2.5" y1="3.5" x2="10" y2="3.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    <line x1="2.5" y1="6.5" x2="12.5" y2="6.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    <line x1="2.5" y1="9.5" x2="8.5" y2="9.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    <line x1="2.5" y1="12.5" x2="11" y2="12.5" stroke="white" stroke-width="1" stroke-linecap="round"/>
+    
+    <!-- Pen -->
+    <g transform="translate(11, 12) rotate(-45)">
+      <!-- Pen body -->
+      <rect x="0" y="0" width="5" height="2" rx="1" ry="1" fill="white"/>
+      <!-- Pen tip -->
+      <polygon points="5,0.5 7.5,1 5,1.5" fill="white"/>
+    </g>
+  </g>
+  
+  <!-- SignX Text -->
+  <g>
+    <!-- "Sign" text -->
+    <text x="25" y="14" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">Sign</text>
+    
+    <!-- "X" text -->
+    <text x="62" y="14" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFD700">X</text>
+  </g>
+</svg>

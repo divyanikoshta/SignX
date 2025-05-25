@@ -5,26 +5,19 @@ import Button from "./ui/Button/Button";
 import { useRef, useState } from "react";
 
 interface handleClickSignProps {
-    handleClickSign: any
+    handleClickSign: any,
+    file: File | null,
+    handleFileChange: any
 }
 
-const FileUploaderConatiner = ({ handleClickSign }: handleClickSignProps) => {
+const FileUploaderConatiner = ({ handleClickSign, file, handleFileChange }: handleClickSignProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [file, setFile] = useState<File | null>(null);
+
     const [numPages, setNumPages] = useState<number>(0);
 
     const handleFileClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
-        }
-    };
-
-    const handleFileChange = (fileObj: File | null) => {
-        const selectedFile = fileObj;
-        if (selectedFile && selectedFile.type === 'application/pdf') {
-            setFile(selectedFile);
-        } else {
-            alert('Please upload a valid PDF file.');
         }
     };
 

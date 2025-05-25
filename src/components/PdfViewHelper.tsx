@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { PdfViewHelperProps } from '../types';
 import { usePdfRenderer } from '../hooks/usePdfRenderer';
 import { useSignatureBoxes } from '../hooks/useSignatureBoxes';
@@ -8,9 +8,32 @@ import SignatureModal from './SignatureModal/SignatureModal';
 import PdfControls from './PdfControls';
 
 const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
-    fileAsBase64,
-    pdfConfig
+    pdfConfig,
+    file
 }) => {
+
+    const [fileAsBase64, setFileAsBase64] = useState<string>('');
+
+    useEffect(() => {
+        console.log("file--->", file)
+        if (!file) return;
+
+        const toBase64 = (file: File): Promise<string> => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                const result = reader.result as string;
+                const base64 = result.replace(/^data:.*;base64,/, '');
+                resolve(base64);
+            };
+            reader.onerror = () => reject(reader.error);
+        });
+
+        toBase64(file)
+            .then(setFileAsBase64)
+            .catch(console.error);
+    }, [file]);
+
     const containerRef = useRef<HTMLDivElement>(null);
     const { isLoaded } = usePdfRenderer(fileAsBase64, pdfConfig.scale);
 
@@ -38,7 +61,7 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
         for (let i = 0; i < pageContainers.length; i++) {
             const container = pageContainers[i] as HTMLElement;
             const rect = container.getBoundingClientRect();
-            
+
             if (
                 e.clientX >= rect.left &&
                 e.clientX <= rect.right &&
@@ -46,15 +69,15 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
                 e.clientY <= rect.bottom
             ) {
                 const pageNumber = parseInt(container.getAttribute('data-page-number') || '1');
-                
+
                 // Calculate position relative to the clicked page container
                 const relativeX = e.clientX - rect.left;
                 const relativeY = e.clientY - rect.top + previousPagesHeight;
-                
+
                 addBox(relativeX, relativeY, pageNumber);
                 break;
             }
-            
+
             // Add this page's height to the cumulative height for next iteration
             previousPagesHeight += rect.height;
         }
@@ -71,8 +94,8 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
     }, [setSelectedBoxId]);
 
     const handleDownloadPdf = useCallback(() => {
-        downloadPdf(pdfConfig.filename || 'signed_document.pdf');
-    }, [downloadPdf, pdfConfig.filename]);
+        downloadPdf(`${file?.name.split(".")[0]}_singed.pdf`);
+    }, [downloadPdf]);
 
     return (
         <div className="pdf-view-helper flex justify-center">

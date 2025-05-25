@@ -9,9 +9,10 @@ export interface SignatureBox {
 }
 
 export interface PdfViewHelperProps {
-  fileAsBase64: string;
-  pdfConfig: { 
+  // fileAsBase64: string;
+  pdfConfig: {
     scale: number;
     filename?: string;
   };
+  file: File | null
 }

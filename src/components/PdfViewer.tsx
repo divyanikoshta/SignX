@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "./Layout";
 import PdfViewHelper from "./PdfViewHelper";
-import FILE from "../mock/sampleFile2";
 import FileUploaderConatiner from "./FileUploaderConatiner";
 import './../pdfWorkerSetup';
 import { pdfjs } from 'react-pdf';
 
-// Set this before using any react-pdf components
 pdfjs.GlobalWorkerOptions.workerSrc = `${process.env.PUBLIC_URL}/pdf.worker.min.mjs`;
 
 
@@ -15,16 +13,30 @@ const PdfViewer = () => {
         scale: 1.5
     }
     const [isSignClicked, setIsSignedClicked] = useState(false);
-    const handleClickSign = () => {
+    const [file, setFile] = useState<File | null>(null);
+
+    const handleNavigation = () => {
         setIsSignedClicked(!isSignClicked);
     }
+    const handleClickSign = () => {
+        handleNavigation()
+    }
+
+    const handleFileChange = async (fileObj: File | null) => {
+        const selectedFile = fileObj;
+        if (selectedFile && selectedFile.type === 'application/pdf') {
+            setFile(selectedFile);
+        } else {
+            alert('Please upload a valid PDF file.');
+        }
+    };
 
     return (
         <div>
             <Layout isSignClicked={isSignClicked} handleClickSign={handleClickSign}>
                 {!isSignClicked ?
-                    <FileUploaderConatiner handleClickSign={handleClickSign} /> :
-                    <PdfViewHelper fileAsBase64={FILE} pdfConfig={pdfConfig} />}
+                    <FileUploaderConatiner file={file} handleFileChange={handleFileChange} handleClickSign={handleClickSign} /> :
+                    <PdfViewHelper file={file} pdfConfig={pdfConfig} />}
             </Layout>
         </div>
     )
