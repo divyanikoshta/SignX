@@ -50,7 +50,7 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
         setSelectedBoxId
     } = useSignatureBoxes();
 
-    const { modifiedPdf, downloadPdf } = usePdfModifier(fileAsBase64, pdfConfig.scale, boxes);
+    const { modifyAndDownloadPdf, isProcessing } = usePdfModifier(fileAsBase64, pdfConfig.scale, boxes);
 
     const handleContainerClick = useCallback((e: React.MouseEvent) => {
         if (!isAddingBox || !containerRef.current) return;
@@ -94,23 +94,23 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
     }, [setSelectedBoxId]);
 
     const handleDownloadPdf = useCallback(() => {
-        downloadPdf(`${file?.name.split(".")[0]}_singed.pdf`);
-    }, [downloadPdf]);
-
-
+        const filename = `${file?.name.split(".")[0]}_signed.pdf`;
+        modifyAndDownloadPdf(filename);
+    }, [modifyAndDownloadPdf, file?.name]);
 
     return (
         <>
             <Loader />
             <div className="pdf-view-helper flex justify-center">
-                <div className='flex justify-center w-[80%]'>
+                <div className='flex justify-center w-full md:w-[80%] flex-col lg:flex-row'>
                     <PdfControls
                         onAddSignatureBox={startAddingBox}
                         onDownloadPdf={handleDownloadPdf}
                         isLoading={!isLoading}
-                        hasSignatures={boxes.some(box => box.sign !== '')} />
+                        hasSignatures={boxes.some(box => box.sign !== '')}
+                        isProcessing={isProcessing} />
 
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', overflow: "auto" }}>
                         <div
                             ref={containerRef}
                             id="pdf-container"
@@ -130,22 +130,11 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
                     </div>
                 </div>
 
-
                 {selectedBoxId && (
                     <SignatureModal
                         onConfirm={handleModalConfirm}
                         onClose={handleModalClose} />
                 )}
-
-                {/* {modifiedPdf && (
-        <iframe
-            title="Modified PDF"
-            src={modifiedPdf}
-            width="100%"
-            height="600px"
-            style={{ border: '1px solid #ccc', marginTop: '20px', borderRadius: '4px' }}
-        />
-    )} */}
             </div>
         </>
     );

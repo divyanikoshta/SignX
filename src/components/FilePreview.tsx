@@ -9,13 +9,12 @@ interface FilePreviewProps {
 }
 
 const FilePreview = ({ file, onDocumentLoadSuccess, numPages, handlePageRenderSuccess }: FilePreviewProps) => {
-
     return (
-        <div className="border rounded shadow-sm p-4 md:w-1/3" style={{ background: "#f1f5f9", width: "40%", display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: "18px", fontWeight: "bold", marginBottom: "0.5rem", color: "#334155", textAlign: "left" }}>
+        <div className="border rounded shadow-sm p-4 bg-slate-100 w-full lg:w-[40%] flex flex-col" style={{ height: "100%", overflow: 'auto' }}>
+            <div className="text-[18px] font-bold mb-2 text-slate-700 text-left">
                 Document Preview
             </div>
-            <div className="border mb-4 overflow-auto h-full" style={{ borderRadius: "0.5rem" }}>
+            <div className="border mb-4 overflow-auto flex-1 rounded-md">
                 {file ? (
                     <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
                         {Array.from({ length: numPages }, (_, index) => (
@@ -23,7 +22,7 @@ const FilePreview = ({ file, onDocumentLoadSuccess, numPages, handlePageRenderSu
                                 renderAnnotationLayer={false} onRenderSuccess={handlePageRenderSuccess} />
                         ))}
                     </Document>
-                ) : <div className="flex justify-center items-center h-full" style={{ background: "white", }}>
+                ) : <div className="flex justify-center items-center h-full bg-white">
                     Please upload the file to sign
                 </div>}
 

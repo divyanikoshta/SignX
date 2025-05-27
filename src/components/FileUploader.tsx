@@ -30,7 +30,7 @@ const FileUploader = ({ fileInputRef, handleFileClick, handleFileChange }: FileU
         setIsDragging(false);
     };
     return (
-        <div className="border-dashed border-2 border-gray-300 bg-gray-50 flex flex-col justify-center items-center  p-10 rounded-lg" style={{ width: "60%" }} onDrop={handleDrop}
+        <div className="border-dashed border-2 border-gray-300 bg-gray-50 flex flex-col justify-center items-center  p-10 rounded-lg w-full lg:w-[60%]" onDrop={handleDrop}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}>
             <UploadCloud size={64} className="text-gray-400 mb-2" />

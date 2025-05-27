@@ -48,18 +48,17 @@ const FileUploaderConatiner = ({ handleClickSign, file, handleFileChange }: hand
     return (
         <>
             <Loader />
-            <div className="flex flex-col items-center" style={{ background: "#f8fafc", height: '100%' }}>
-                <div className="flex flex-col" style={{ background: "white", border: "1px solid #e2e8f0", borderRadius: "0.5rem", width: "80%", margin: "auto", padding: "2rem", height: "80%" }}>
-
-                    <div style={{ fontSize: "26px", fontWeight: "bold", marginBottom: "1rem" }}>
+            <div className="flex flex-col items-center justify-center bg-gray-50 h-full">
+                <div className="flex flex-col bg-white border border-gray-300 rounded-md w-[80%] p-8 h-full lg:h-[80%]">
+                    <div className="text-[26px] font-bold mb-4">
                         Free PDF Signing
                     </div>
-                    <div className="flex flex-col md:flex-row gap-6" style={{ height: "76%" }}>
-                        {/* Uploaded PDF Preview */}
-                        <FilePreview file={file} onDocumentLoadSuccess={onDocumentLoadSuccess} numPages={numPages} handlePageRenderSuccess={handlePageRenderSuccess} />
-
+                    <div className="flex flex-col md:flex-row gap-6 flex-1" style={{ height: "76%" }}>
                         {/* Dropzone */}
                         <FileUploader fileInputRef={fileInputRef} handleFileClick={handleFileClick} handleFileChange={handleFileChange} />
+
+                        {/* Uploaded PDF Preview */}
+                        <FilePreview file={file} onDocumentLoadSuccess={onDocumentLoadSuccess} numPages={numPages} handlePageRenderSuccess={handlePageRenderSuccess} />
                     </div>
 
                     <div className="mt-4 text flex justify-end items-center">

@@ -1,15 +1,24 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { PDFDocument } from 'pdf-lib';
 import { SignatureBox } from '../types';
 
 export const usePdfModifier = (fileAsBase64: string, scale: number, boxes: SignatureBox[]) => {
-  const [modifiedPdf, setModifiedPdf] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   
-  const modifyPdf = useCallback(async () => {
+  const modifyAndDownloadPdf = useCallback(async (filename = 'signed_document.pdf') => {
     if (!fileAsBase64 || boxes.length === 0) {
-      setModifiedPdf(null);
+      console.warn('No PDF file or signature boxes available');
       return;
     }
+
+    // Check if there are any signed boxes
+    const signedBoxes = boxes.filter(box => box.sign);
+    if (signedBoxes.length === 0) {
+      console.warn('No signatures to add to PDF');
+      return;
+    }
+
+    setIsProcessing(true);
 
     try {
       const pdfBytes = Uint8Array.from(atob(fileAsBase64), c => c.charCodeAt(0));
@@ -23,9 +32,7 @@ export const usePdfModifier = (fileAsBase64: string, scale: number, boxes: Signa
         rect: (container as HTMLElement).getBoundingClientRect()
       }));
 
-      for (const box of boxes) {
-        if (!box.sign) continue;
-        
+      for (const box of signedBoxes) {
         // Process image data
         const imageBase64 = box.sign.replace("data:image/png;base64,", "");
         const imageBytes = Uint8Array.from(atob(imageBase64), c => c.charCodeAt(0));
@@ -78,23 +85,9 @@ export const usePdfModifier = (fileAsBase64: string, scale: number, boxes: Signa
       }
 
       const modifiedBase64 = btoa(str);
-      setModifiedPdf(`data:application/pdf;base64,${modifiedBase64}`);
-    } catch (error) {
-      console.error('Error modifying PDF:', error);
-      setModifiedPdf(null);
-    }
-  }, [fileAsBase64, scale, boxes]);
-
-  useEffect(() => {
-    if (boxes.some(box => box.sign)) {
-      modifyPdf();
-    }
-  }, [boxes, modifyPdf]);
-
-  const downloadPdf = useCallback((filename = 'signed_document.pdf') => {
-    if (!modifiedPdf) return;
-    
-    try {
+      const modifiedPdf = `data:application/pdf;base64,${modifiedBase64}`;
+      
+      // Download the modified PDF
       const base64String = modifiedPdf.replace(/^data:application\/pdf;base64,/, '');
       const byteCharacters = atob(base64String); 
       const byteArray = new Uint8Array(byteCharacters.length);
@@ -111,13 +104,16 @@ export const usePdfModifier = (fileAsBase64: string, scale: number, boxes: Signa
       
       // Clean up
       URL.revokeObjectURL(link.href);
+      
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+      console.error('Error modifying PDF:', error);
+    } finally {
+      setIsProcessing(false);
     }
-  }, [modifiedPdf]);
+  }, [fileAsBase64, scale, boxes]);
 
   return {
-    modifiedPdf,
-    downloadPdf
+    modifyAndDownloadPdf,
+    isProcessing
   };
 };

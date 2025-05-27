@@ -117,16 +117,18 @@ export const useSignatureBoxes = () => {
     }, [boxes]);
 
     const handleBoxMouseDown = useCallback((e: React.MouseEvent, index: number) => {
+        console.log("handleBoxMouseDown---")
         e.stopPropagation();
         dragItemIndex.current = index;
         isMoving.current = false;
 
         const box = boxes[index];
         const containerElement = document.getElementById('pdf-container');
+        console.log("containerElement-->", containerElement)
         if (!containerElement) return;
 
         const containerRect = containerElement.getBoundingClientRect();
-        
+
         // Calculate the initial offset from mouse to box position using screen coordinates
         offset.current = {
             x: e.clientX - box.x,
@@ -149,6 +151,7 @@ export const useSignatureBoxes = () => {
     }, [handleMouseMove]);
 
     const handleBoxClick = useCallback((e: React.MouseEvent, boxId: string) => {
+        console.log("handleBoxClick--->")
         if (isMoving.current) return;
 
         e.stopPropagation();

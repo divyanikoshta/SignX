@@ -6,10 +6,9 @@ import Button from "../ui/Button/Button";
 interface SignatureModalProp {
     onConfirm: (signatureDataUrl: string) => void;
     onClose: () => void;
-    children?: React.ReactNode;
 }
 
-const SignatureModal = ({ children, onConfirm, onClose }: SignatureModalProp) => {
+const SignatureModal = ({ onConfirm, onClose }: SignatureModalProp) => {
     const signRef = useRef<ReactSignatureCanvas>(null);
     const [isEmpty, setIsEmpty] = useState(true);
 
