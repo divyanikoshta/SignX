@@ -110,12 +110,13 @@ const PdfViewHelper: React.FC<PdfViewHelperProps> = ({
                         hasSignatures={boxes.some(box => box.sign !== '')}
                         isProcessing={isProcessing} />
 
-                    <div style={{ display: 'flex', justifyContent: 'center', overflow: "auto" }}>
+                    <div className="flex justify-center overflow-auto lg:overflow-visible">
                         <div
                             ref={containerRef}
                             id="pdf-container"
                             onClick={handleContainerClick}
                             style={{ position: 'relative' }}
+                            className="overflow-auto lg:overflow-visible"
                         >
                             {boxes.map((box, index) => (
                                 <SignatureBox
