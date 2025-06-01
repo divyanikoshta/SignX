@@ -3,6 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { initGA } from './analytics';
+
+// Initialize Google Analytics
+// TODO: move it to env file
+initGA('G-5F1QFHSK24');
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

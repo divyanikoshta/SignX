@@ -18,6 +18,7 @@
     "pdfjs-dist": "^4.3.136",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-ga4": "^2.1.0",
     "react-pdf": "^9.2.1",
     "react-scripts": "5.0.1",
     "react-signature-canvas": "^1.0.7",
