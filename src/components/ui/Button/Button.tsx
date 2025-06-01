@@ -56,8 +56,17 @@ const StyledButton = styled.button<StyledButtonProps>`
 
   ${({ variant = 'primary' }) => variantStyles[variant]}
   ${({ size = 'small' }) => sizeStyles[size]}
-   ${({ disabled }) =>
-    disabled &&
+   ${({ disabled, variant }) =>
+    disabled && variant === 'primary' &&
+    css`
+      background-color: #e5e7eb !important; /* light gray */
+      color: #6b7280 !important; /* dark gray */
+      opacity: 1;
+      cursor: not-allowed;
+      pointer-events: none;
+    `}
+  ${({ disabled, variant }) =>
+    disabled && variant !== 'primary' &&
     css`
       opacity: 0.6;
       cursor: not-allowed;
