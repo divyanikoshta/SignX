@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { PDFDocument } from 'pdf-lib';
-import { getPDFDocument, createPDFPage, renderPDFToCanvas } from '../utility/pdfViewerUtility';
+import {
+    getPDFDocument,
+    createPDFPage,
+    renderPDFToCanvas,
+    renderPDFToContainerCanvas
+} from '../utility/pdfViewerUtility';
 
 export const usePdfRenderer = (fileAsBase64: string, scale: number) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -46,7 +51,7 @@ export const usePdfRenderer = (fileAsBase64: string, scale: number) => {
                     canvas.width = width;
                     canvas.style.border = "1px solid var(--tertiary-color)";
                     canvas.style.boxShadow = "0px 0px 3px var(--tertiary-color)";
-                    const pdfPageCanvas = await renderPDFToCanvas(pdfPage, canvas, { scale });
+                    const pdfPageCanvas = await renderPDFToContainerCanvas(pdfPage, canvas, width, height);
                     perPageContainer.appendChild(pdfPageCanvas);
                 }
 
